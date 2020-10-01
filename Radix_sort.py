@@ -1,101 +1,204 @@
 class Node:
-  def __init__(self ,data):
-    self.data = data
-    self.next = None
-  
+    def __init__(self, data):
+        self.data = data
+        self.previous = None
+        self.next = None
+
+    def __str__(self):
+        return str(self.data)
+
+
 class LinkedList:
-  def __init__(self):
-    self.head = None
-    self.tail = None
-    self.count = 1
-    self.zero = []
-    self.check = 0
-    self.isFirstRound = True
-  def __str__(self):
-    show_str = ""
-    current = self.head
-    while current:
-      show_str += current.data + " -> "
-      current = current.next
-    show_str = show_str[:-4]
-    return show_str
-  def append(self, item):
-    new_node = Node(item)
-    current = self.head
-    if current is None:
-      self.head = new_node
-      self.tail = new_node
-      return
-    while current.next:
-      current = current.next
-      self.tail = current
-    current.next = new_node
-    self.tail = new_node
-    new_node.next = None
-  def radix_sort(self): 
-    print("------------------------------------------------------------")
-    print(f"Round : {self.count}")
-    self.check = 0
-    self.cal_10digit()
-    self.count += 1
-    if self.check <= 9 and not self.zero:
-      self.radix_sort()
-    else:
-      print("------------------------------------------------------------")
-      print(f"{self.count - 2} Time(s)")
-      print("Before Radix Sort :", self)
-      print("After Radix Sort :", " -> ".join(self.zero))
+    def __init__(self):
+        self.head = self.tail = None
+        self.sizes = 0
 
-  def cal_10digit(self):
-    for i in range(10):
-      if i == 0 and self.isFirstRound:
-        temp = self.real_math(i)
-        print(f"{i} : {temp}")
-        self.isFirstRound = False
-      elif i == 0 and not self.isFirstRound:
-        self.real_math(i)
-        show_zero = " ".join(self.zero)
-        print(f"{i} : {show_zero}")
-      else:
-        print(f"{i} : {self.real_math(i)}")
-  def real_math(self, digit): # return ทุกตัวที่ลงท้ายด้วย i
-    current = self.head
-    temp_str = ""
-    temp_list = []
-    temp_compare = []
-    while current:
-      if self.get_digit(current.data) == digit:
-        temp_compare.append(current.data)
-      elif self.get_digit(current.data) == -1:
-        temp_list.append(current.data)
-      current = current.next
-    if temp_compare == []:
-      self.check += 1
-    temp_compare = list(map(int, temp_compare))
-    temp_compare.sort()
-    temp_compare = list(map(str, temp_compare))
-    temp_str = " ".join(temp_compare)
-    temp_list = list(map(int, temp_list))
-    temp_list.sort()
-    temp_list = list(map(str, temp_list))
-    self.zero = temp_list
-    return temp_str
+    def __str__(self):
+        if not self.isEmpty():
+            cur = self.head
+            s = ""
+            while cur.next != None:
+                s += str(cur.data) + ' -> '
+                cur = cur.next
+            s += str(cur.data)
+            return s
+        else:
+            return ''
 
-  def get_digit(self, n):
-    if int(n) < 0:
-      n = str(abs(int(n)))
-    else:
-      n = str(n)
-    count = self.count
-    if len(n) < count:
-      return -1
-    return int(n[len(n)-count])
-    
+    def str_without(self):
+        if not self.isEmpty():
+            cur = self.head
+            s = ""
+            while cur.next != None:
+                s += str(cur.data) + ' '
+                cur = cur.next
+            s += str(cur.data)
+            return s
+        else:
+            return ''
 
-if __name__ == "__main__":
-  n = input("Enter Input : ").split()
-  ll = LinkedList()
-  for i in n:
-    ll.append(i)
-  ll.radix_sort()
-  
+    def reverse(self):
+        if not self.isEmpty():
+            cur = self.tail
+            s = ""
+            while cur.previous != None:
+                s += str(cur.data) + ' -> '
+                cur = cur.previous
+            s += str(cur.data)
+            return s
+        else:
+            return ''
+
+    def isEmpty(self):
+        return self.sizes == 0
+
+    def size(self):
+        return self.sizes
+
+    def append(self, data):
+        if self.head == None:
+            self.head = self.tail = Node(data)
+        else:
+            t = Node(data)
+            t.previous = self.tail
+            t.next = self.tail.next
+            self.tail.next = t
+            self.tail = t
+        self.sizes += 1
+
+    def addHead(self, data):
+        if self.head == None:
+            self.head = self.tail = Node(data)
+        else:
+            t = Node(data)
+            t.next = self.head
+            t.previous = self.head.previous
+            self.head.previous = t
+            self.head = t
+        self.sizes += 1
+
+    def insert(self, index, data):
+        if index == 0 or index < -1*self.sizes:
+            self.addHead(data)
+        elif index > self.sizes - 1:
+            self.append(data)
+        else:
+            if index < 0:
+                index = self.sizes + index
+            q = Node(data)
+            p = self.head
+            for i in range(index - 1):
+                p = p.next
+            q.next = p.next
+            q.previous = p
+            p.next.previous = q
+            p.next = q
+            self.sizes += 1
+
+    def search(self, data):
+        cur = self.head
+        while cur != None:
+            if cur.data == data:
+                return True
+            cur = cur.next
+        return False
+
+    def index(self, data):
+        p = self.head
+        i = 0
+        while p != None:
+            if p.data == data:
+                return i
+            i += 1
+            p = p.next
+        return -1
+
+    def pop(self, index=None):
+        if index == 0 or index == -1*self.sizes:
+            self.head.next.previous = self.head.previous
+            self.head = self.head.next
+        elif index == None or index == -1 or index == self.sizes - 1:
+            self.tail.previous.next = self.tail.next
+            self.tail = self.tail.previous
+
+        else:
+            cur = self.head
+            for i in range(index - 1):
+                cur = cur.next
+            if cur.next.next != None:
+                cur.next.next.previous = cur
+            cur.next = cur.next.next
+        self.sizes -= 1
+
+
+def RadixSort(L=LinkedList()):
+    before_sort, after_sort = L, LinkedList()
+    roundtake = 1
+    cur = before_sort.head
+    q = -1
+    while True:
+        print('------------------------------------------------------------')
+        print(f'Round : {roundtake}')
+        for j in range(10):
+            print(f'{j} : ', end='')
+            m = LinkedList()
+            t = before_sort.head
+            while t != None:
+                w = len(t.data)
+                if '-' in t.data:
+                    w -= 1
+                if (q < -w and j == 0):
+                    if m.size() == 0:
+                        m.append(t.data)
+                    else:
+                        if int(m.head.data) <= int(t.data) <= int(m.tail.data):
+                            a = m.head
+                            ind = 0
+                            while a != None:
+                                if int(a.data) >= int(t.data):
+                                    m.insert(ind, t.data)
+                                    break
+                                ind += 1
+                                a = a.next
+                        elif int(m.head.data) > int(t.data):
+                            m.addHead(t.data)
+                        elif int(m.tail.data) < int(t.data):
+                            m.append(t.data)
+                if q >= -w:
+                    if t.data[q] == str(j):
+                        if m.size() == 0:
+                            m.append(t.data)
+                        else:
+                            if int(m.head.data) <= int(t.data) <= int(m.tail.data):
+                                a = m.head
+                                ind = 0
+                                while a != None:
+                                    if int(a.data) >= int(t.data):
+                                        m.insert(ind, t.data)
+                                        break 
+                                    ind += 1
+                                    a = a.next
+                            elif int(m.head.data) > int(t.data):
+                                m.addHead(t.data)
+                            elif int(m.tail.data) < int(t.data):
+                                m.append(t.data)
+                t = t.next
+            print(m.str_without())
+            if m.size() == before_sort.size() and j == 0:
+                after_sort = m
+        if before_sort.size() == after_sort.size():
+            break
+        roundtake += 1
+        q -= 1
+    print('------------------------------------------------------------')
+    print(f'{roundtake - 1} Time(s)')
+    print(f'Before Radix Sort : {before_sort}')
+    print(f'After  Radix Sort : {after_sort}')
+    L = after_sort
+
+
+inp = input("Enter Input : ").split()
+L = LinkedList()
+for i in inp:
+    L.append(i)
+RadixSort(L)

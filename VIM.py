@@ -20,10 +20,8 @@ class LinkedList:
     def append(self, item):
         new_node = Node(item)
         if self.tail is None:
-            self.head = new_node
-            self.tail = new_node
+            self.head = self.tail = new_node
         else:
-            #            print("Before :", self)
             self.head.next = new_node
             self.afterAppend(new_node)
             self.head = new_node
