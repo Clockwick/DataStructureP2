@@ -13,6 +13,7 @@ def powerSet(str1, index, lst, dif):
             sour *= j[0]
             bitter += j[1]
         re = abs(sour - bitter)
+
         if re > dif:
             ans.append(dif)
             powerSet(str1, i, lst, dif)
@@ -27,4 +28,3 @@ if __name__ == '__main__':
     inp = input("Enter Input : ").split(",")
     powerSet(inp, -1, [], 1000000)
     print(min(ans))
-

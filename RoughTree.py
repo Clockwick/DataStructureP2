@@ -1,26 +1,26 @@
-n, arr = input("Enter Input : ").split("/")
-n = int(n)
-arr = list(map(int, arr.split()))
+
+def rough(n):
+    if po[n] != -1:
+        return po[n]
+    po[n] = min(rough(2*n+1), rough(2*n+2))
+    po[2*n+1] -= po[n]
+    po[2*n+2] -= po[n]
+    return po[n]
 
 
-def abc(s: int, l: list, e: list):
-    if len(l) == 1:
-        s += l[0]
-        return s
-    if len(l) == 0:
-        return abc(s, e, [])
+N, vall = input("Enter Input : ").split("/")
+cal = (int(N)//2)+1
+val = vall.split()
+po = []
+m = 0
+for i in range(int(N)):
+    if i >= int(cal)-1:
+        po.append(int(val[m]))
+        m += 1
     else:
-        m = min(l[0], l[1])
-        e.append(m)
-        l[0] -= m
-        l[1] -= m
-        s += l[0] + l[1]
-        l.pop(0)
-        l.pop(0)
-        return abc(s, l, e)
-
-
-if (len(arr) * 2) - 1 != n:
+        po.append(-1)
+if len(val) != cal:
     print("Incorrect Input")
 else:
-    print(abc(0, arr, []))
+    rough(0)
+    print(sum(po))
