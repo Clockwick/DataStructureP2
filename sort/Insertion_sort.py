@@ -12,3 +12,4 @@ arr = [8, 12, 13, 16, 17, 19, 2, 12, 0, 11, 11, 9, 19, 19, 0, 14, 18, 20, 9, 3]
 print("Unsorted array :", arr)
 insertion_sort(arr)
 print("Sorted array :", arr)
+

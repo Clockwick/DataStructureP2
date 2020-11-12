@@ -6,7 +6,6 @@ def bubble_sort(n):
             if n[j] > n[j+1]:
                 n[j], n[j+1] = n[j+1], n[j]
             k += 1
-            print(k)
 
 
 if __name__ == "__main__":
