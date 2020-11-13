@@ -55,7 +55,7 @@ def merge(l1, l2):
 l1, l2 = input("Enter Input (L1,L2) : ").split()
 llist1 = LinkedList()
 llist2 = LinkedList()
-if l1.find("->") > 0:
+if l1.fintd("->") > 0:
     l1_list = l1.split("->")
     for i in l1_list:
         llist1.append(i)
