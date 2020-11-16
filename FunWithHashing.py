@@ -51,10 +51,7 @@ class Hash:
                     n += 1
     def get_size(self):
         return self.current_size         
-                    
-            
-                
-                    
+                             
 print(" ***** Fun with hashing *****")
 inp = input("Enter Input : ").split("/")
 table_size, max_col = list(map(int,inp[0].split()))
